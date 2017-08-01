@@ -1,0 +1,19 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <div th:fragment="myflow_scripts" th:remove="tag">
+        <script th:src="@{/scripts/cookies.js}"></script>
+        <script th:src="@{/scripts/myflow/client-util.js}"></script>
+        <script th:src="@{/scripts/myflow/client-expression.js}"></script>
+        <script th:src="@{/scripts/myflow/client-core.js}"></script>
+        <script th:src="@{/scripts/myflow/client-consumer.js}"></script>
+        <script th:src="@{/scripts/myflow/client-components.js}"></script>
+    </div>
+    <div th:fragment="common_route_scripts" th:remove="tag">
+        <script th:src="@{/scripts/common_route.js}"></script>
+    </div>
+    <div th:fragment="webjars_scripts" th:remove="tag">
+        <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+        <script th:src="@{/webjars/jquery-ui/jquery-ui.min.js}"></script>
+        <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+    </div>
+</html>

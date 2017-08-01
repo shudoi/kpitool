@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'users')}">
+    <body>
+        <div class="container">
+            <h1>Users</h1>
+            <p><span th:text="${username}"></span>としてログイン</p>
+            <table class="table table-hover">
+                <thead>
+                    <tr><th>Username</th><th>Role</th><th>Project</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>admin</td><td>Administrator</td><td>KPI tool</td></tr>
+                    <tr><td>member</td><td>Team member</td><td>KPI tool</td></tr>
+                </tbody>
+            </table>
+            <div th:classappend="${username == 'admin' ? 'show':'hide'}">
+                <input type="button" class="btn btn-primary btn-block" value="Add User">
+            </div>
+        </div>
+        <script>
+            var env = {'context':
+                        {'path': '/boo'}
+            };
+            new Listener('onload', window)
+                    .task(server('/bar'))
+                    .to(log("boo"));
+            /*new Listener('onclick', 'input[type=button]')
+             .to(loadElement(byid('myform')))
+             .to(function (exchange) {
+             exchange.setBody("chaichai");
+             console.log(exchange.getHeaders())
+             return exchange;
+             })
+             .task(server('/boo'))
+             .to(log({'body': true, 'header': 'true'}));*/
+        </script>
+    </body>
+
+</html>

@@ -1,0 +1,57 @@
+<!doctype html>
+<html th:fragment="layout (template, menu)">
+    <head>
+        <title>KPI / Monitoring tool</title>
+        <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" />
+        <link rel="stylesheet" type="text/css" href="/stylesheets/main.css" />
+    </head>
+
+    <body>
+        <nav class="navbar navbar-default navbar-static-top navbar-inverse">
+            <div class="container">
+                <ul class="nav navbar-nav">
+                    <li th:classappend="${#httpServletRequest.getRequestURI() == '/' ? 'active':''}">
+                        <a href="/"><span class="glyphicon glyphicon-home"></span> Home</a>
+                    </li>
+                    <li th:classappend="${#httpServletRequest.getRequestURI() == '/users' ? 'active':''}">
+                        <a href="/users"><span class="glyphicon glyphicon-user"></span> Users</a>
+                    </li>
+                    <li>
+                        <a href="/tasks"><span class="glyphicon glyphicon-tasks"></span> Tasks</a>
+                    </li>
+                    <li th:classappend="${#httpServletRequest.getRequestURI() == '/report' ? 'active':''}">
+                        <a href="/report"><span class="glyphicon glyphicon-file"></span> Report</a>
+                    </li>
+                    <li>
+                        <a href="#"><span class="glyphicon glyphicon-stats"></span> Monitoring</a>
+                    </li>
+                    <!--
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="glyphicon glyphicon-info-sign"></span> Information <span class="caret"></span></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a href="https://devcenter.heroku.com/articles/getting-started-with-ruby">Getting Started with Ruby on Heroku</a></li>
+                            <li><a href="https://devcenter.heroku.com/articles/getting-started-with-nodejs">Getting Started with Node on Heroku</a></li>
+                            <li><a href="https://devcenter.heroku.com/articles/getting-started-with-php">Getting Started with PHP on Heroku</a></li>
+                            <li><a href="https://devcenter.heroku.com/articles/getting-started-with-python">Getting Started with Python on Heroku</a></li>
+                            <li><a href="https://devcenter.heroku.com/articles/getting-started-with-java">Getting Started with Java on Heroku</a></li>
+                            <li><a href="https://devcenter.heroku.com/articles/getting-started-with-go">Getting Started with Go on Heroku</a></li>
+                            <li><a href="https://devcenter.heroku.com/articles/getting-started-with-clojure">Getting Started with Clojure on Heroku</a></li>
+                            <li><a href="https://devcenter.heroku.com/articles/getting-started-with-scala">Getting Started with Scala on Heroku</a></li>
+                            <li class="divider"></li>
+                            <li><a href="https://devcenter.heroku.com/articles/getting-started-with-heroku-and-connect-without-local-dev">Getting Started on Heroku with Heroku Connect</a></li>
+                            <li><a href="https://devcenter.heroku.com/articles/getting-started-with-jruby">Getting Started with Ruby on Heroku (Microsoft Windows)</a></li>
+                        </ul>
+                    </li>-->
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="navbar-right">
+                        <a href="#" id="logout-link"><span class="glyphicon glyphicon-log-out"></span> Log out</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <div th:replace="~{fragments/scripts :: myflow_scripts}"></div>
+        <div th:replace="~{fragments/scripts :: common_route_scripts}"></div>
+        <div th:replace="${template}"/>
+        <div th:replace="~{fragments/scripts :: webjars_scripts}"></div>
+    </body>

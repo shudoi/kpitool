@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'report')}">
+    <body>
+        <div class="container">
+            <h1>Monitoring Tool / Home</h1>
+            <p><span th:text="${username}"></span>としてログイン</p>
+            <form method="POST" action="/boo" id="myform">
+                <input type="text" data-header="mytext">
+                <input type="button" value="送信">
+            </form>
+        </div>
+        <script>
+            var env = {'context':
+                        {'path': '/boo'}
+            };
+            new Listener('onload', window)
+                    .task(server('/bar'))
+                    .to(log("boo"));
+            new Listener('onclick', 'input[type=button]')
+                    .to(loadElement(byid('myform')))
+                    .to(function (exchange) {
+                        exchange.setBody("chaichai");
+                        console.log(exchange.getHeaders())
+                        return exchange;
+                    })
+                    .task(server('/boo'))
+                    .to(log({'body': true, 'header': 'true'}));
+        </script>
+    </body>
+
+</html>

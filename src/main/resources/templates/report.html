@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'hello')}">
+    <body>
+        <div class="container">
+            <h1>Create report</h1>
+            <p>logged in as <span th:text="${username}"></span></p>
+            <h2>July 25</h2>
+            <a href="#">choose report date...</a>
+            <table class="table table-hover" id="report-table">
+                <thead>
+                    <tr><th>#</th><th>Item name</th><th style="width:130px;text-align:center;">Today progress</th><th style="width:130px;text-align:center;">Total progress</th><th style="width:100px;text-align:center;">Actual time</th><th>Comment</th><th>Edit</th><th>Remove</th></tr>
+                </thead>
+                <tbody>
+                    <tr th:each="item : ${tableData}">
+                        <td data-header="no" th:text="${item.no}"></td>
+                        <td data-header="name" th:text="${item.name}"></td>
+                        <td class="text-right"><span data-header="today_progress" th:text="${item.today_progress}"></span>%</td>
+                        <td class="text-right"><span data-header="total_progress" th:text="${item.total_progress}"></span>%</td>
+                        <td class="text-right"><span data-header="actual_time" th:text="${item.get('actual_time')}"></span>h</td>
+                        <td data-header="comment" th:text="${item.comment}"></td>
+                        <td><span class="glyphicon glyphicon-pencil edit-item" style="color:#337ab7;"></span></td>
+                        <td><span class="glyphicon glyphicon-remove remove-item" style="color:#d9534f;"></span></td>
+                    </tr>
+                </tbody>
+            </table>
+            <input type="button" class="btn btn-default" value="Add Item" id="add-item-modal-open">
+        </div>
+        <div id="add-item-modal" class="my-modal">
+            <div id="modal-content">
+                <form id='add-item-form'>
+                    <h2><span id="add-item-form-title">Add Item</span></h2>
+                    <table class="table">
+                        <tr>
+                            <th>
+                                Today's Task number
+                            </th>
+                            <td data-header='no'>
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Item name</th>
+                            <td><select data-header="name" id="task-select">
+                                    <option value>---</option>
+                                    <option th:each="task : ${tasks}" th:value="${task.name}" th:text="${task.name}">
+
+                                    </option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Scheduled start date</th>
+                            <td data-header="scheduled_start_date">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Scheduled end date</th>
+                            <td data-header="scheduled_end_date">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Actual start date</th>
+                            <td data-header="actual_start_date">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Actual end date</th>
+                            <td data-header="actual_end_date">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Today Progress</th>
+                            <td><input type="number" data-header="today_progress" min="0" max="100" step="1" style="width:70px;"> %
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Total Progress</th>
+                            <td><span data-header-from="total_progress"></span>%
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Actual time</th>
+                            <td><input type="number" data-header="actual_time" min="0.25" max="24" step="0.25" style="width:70px;"> h
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Comment</th>
+                            <td><textarea data-header="comment" rows="3"></textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <input type="button" value="Save" id='save-item' class="btn btn-default">
+                                <input type="button" value="Close" id='add-item-modal-close' class="btn btn-default">
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+        </div>
+        <script>
+            var trTemplate = '<td data-header="no"></td><td data-header="name"></td><td class="text-right"><span data-header="today_progress"></span>%</td><td class="text-right"><span data-header="total_progress"></span>%</td><td class="text-right"><span data-header="actual_time"></span>h</td><td data-header="comment"></td><td><span class="glyphicon glyphicon-pencil edit-item" style="color:#337ab7;"></span></td><td><span class="glyphicon glyphicon-remove remove-item" style="color:#d9534f;"></span></td>'
+
+            new Listener("onclick", byid("add-item-modal-open"))
+                    .document(
+                            text(byid('add-item-form-title'), 'Add Item'),
+                            removeAttr(byid('task-select'), 'disabled'))
+                    .update({'header': {
+                            'today_progress': '0',
+                            'actual_time': '0'}})
+                    .to(exchangeToElement(byid('add-item-form')))
+                    .to(modal(byid('add-item-modal'), 'open'));
+
+            new Listener('onclick', selectAll('#add-item-modal, #add-item-modal-close'))
+                    .filter(_in(get(element(), 'id'), ['add-item-modal', 'add-item-modal-close']))
+                    .to(modal(byid('add-item-modal'), 'close'));
+
+            new Listener('onclick', '.edit-item')
+                    .document(text(byid('add-item-form-title'), 'Edit Item'))
+                    .to(loadElement(parent(element(), 2))) // TBD: elementToElement
+                    .to(exchangeToElement(byid('add-item-form')))
+                    .to(modal(byid('add-item-modal'), 'open'))
+                    .document(attr(byid('task-select'), 'disabled', 'disabled'))
+                    .task(server('/task-info'))
+                    .update({'headers': header('taskInfo')})
+                    .to(exchangeToElement(byid('add-item-form')));
+
+            new Listener('onclick', byid('save-item'))
+                    .to(loadElement(byid('add-item-form')))
+                    .filter(function (exchange) {
+                        if (!exchange.getHeader("name")) {
+                            window.alert("Please set Item name.");
+                            return false;
+                        }
+                        return true;
+                    })
+                    .filter(function (exchange) {
+                        var no = exchange.getHeader("no");
+                        var alreadyEntryFlag = false;
+                        selectAll('#report-table tbody tr').forEach(function (element) {
+                            if (element.querySelector('[data-header="no"]').innerHTML !== no) {
+                                if (element.querySelector('[data-header="name"]').innerHTML === exchange.getHeader("name")) {
+                                    window.alert("That item has already been entered.");
+                                    alreadyEntryFlag = true;
+                                }
+                            }
+                        });
+                        return !alreadyEntryFlag;
+                    })
+                    .filter(all(query('#report-table tbody tr'),
+                            or(eq(header('no'), text(query(element(), '[data-header="no"]'))),
+                                    notEq(header('name'), text(query(element(), '[data-header="name"]')))),
+                            _alert("That item has already been entered.")))
+                    .to(function (exchange) {
+                        var no = exchange.getHeader("no");
+                        if (no) {
+                            selectAll('#report-table tbody tr').forEach(function (element) {
+                                if (element.querySelector('[data-header="no"]').innerHTML === no + "") {
+                                    exchange.setElement(element);
+                                }
+                            });
+                        } else {
+                            var newNo = 0;
+                            selectAll('#report-table tbody tr').forEach(function (element) {
+                                newNo = Math.max(new Number(element.querySelector('[data-header="no"]').innerHTML), newNo);
+                            });
+                            exchange.setHeader("no", newNo + 1);
+                            var child = document.createElement("tr");
+                            child.innerHTML = trTemplate;
+                            new EventGroup().setEvents(child);
+                            selectOne("#report-table tbody").appendChild(child);
+                            exchange.setElement(child);
+                        }
+                        return exchange;
+                    })
+                    .to(exchangeToElement()) // テーブルに戻した後テーブルから読むから必須
+                    .to(elementsToExchange('#report-table tbody tr'))
+                    .task(server('/report'))
+                    .to(exchangeToElement(
+                            findOne(query('#report-table tbody tr'),
+                                    eq(header('no'), text(query(element(), '[data-header="no"]'))))))
+                    .to(modal(byid('add-item-modal'), 'close'));
+
+            new Listener('onclick', '.remove-item')
+                    .update({'element': parent(element(), 2)}) // あとでremoveするので参照ではなくセット
+                    .to(loadElement())
+                    .filter(_confirm(add(header('no'), '番を削除します。')))
+                    .to(function (exchange) {
+                        var headers = copyByJson(exchange.getHeaders());
+                        exchange.getElement().remove();
+                        exchange.setHeaders(headers);
+                        return exchange;
+                    })
+                    .document(seqNo(query('#report-table tbody tr td[data-header="no"]')))
+                    .to(elementsToExchange('#report-table tbody tr'))
+                    .task(server('/report'));
+
+            new Listener('onchange', byid('task-select'))
+                    .filter(get(element(), 'value'))
+                    .update({'header': {'name': get(element(), 'value')}})
+                    .task(server('/task-info'))
+                    .update({'headers': header('taskInfo')})
+                    .to(exchangeToElement(byid('add-item-form')))
+                    .to(log());
+        </script>
+    </body>
+
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'tasks')}">
+    <body>
+        <div class="container">
+            <h1>Task statistics</h1>
+            <select data-header="name" id="task-select">
+                <option value>choose task</option>
+                <option th:each="task : ${tasks}" th:value="${task.name}" th:text="${task.name}">
+
+                </option>
+            </select>
+            <table class="table table-hover" id="info-table">
+                <thead><th>Date</th><th>User</th><th>Progress</th><th>Actual time</th><th>Comment</th></thead>
+                <tbody></tbody>
+            </table>
+        </div>
+        <script>
+            var trTemplate = '<td data-header="date"></td><td data-header="username"></td><td class="text-right"><span data-header="today_progress"></span>%</td><td class="text-right"><span data-header="actual_time"></span>h</td><td data-header="comment"></td>'
+            new Listener('onchange', byid('task-select'))
+                    .filter(get(element(), 'value'))
+                    .to(updateHeader({
+                        'name': get(element(), 'value'),
+                        'show_log': true
+                    }))
+                    .task(server('/task-info'))
+                    .to(dataHeaderToTable("data", "#info-table", trTemplate));
+        </script>
+    </body>
+</html>
