@@ -1,21 +1,9 @@
 package com.cg;
 
-import com.cg.myflow.Endpoints;
-import com.cg.myflow.Exchange;
-import com.mongodb.MongoClient;
-import com.mongodb.MongoClientURI;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoCursor;
-import com.mongodb.client.MongoDatabase;
-import com.mongodb.client.model.Filters;
-import com.mongodb.client.model.UpdateOptions;
-import io.jsonwebtoken.Claims;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
+
 import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -23,6 +11,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.cg.myflow.Endpoints;
+import com.cg.myflow.Exchange;
+import com.mongodb.MongoClient;
+import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.UpdateOptions;
+
+import io.jsonwebtoken.Claims;
 
 @RestController
 public class ExchangeController {
@@ -53,6 +49,7 @@ public class ExchangeController {
     @RequestMapping(value = "/login", method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     Exchange login(@RequestBody Exchange exchange) {
+    	System.out.println("toutatu");
         String username = exchange.getHeader("username", String.class);
         String password = exchange.getHeader("password", String.class);
         Endpoints.sendTo("login", exchange);

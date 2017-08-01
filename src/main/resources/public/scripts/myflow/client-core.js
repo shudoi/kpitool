@@ -74,6 +74,12 @@ Producer.prototype.document = function () {
     return this.next_producer;
 }
 
+Producer.prototype.when = function (routes) {
+    this.next_producer = new Producer(createWhenProcessor(routes, this.consumer));
+    return this.next_producer;
+}
+
+
 Producer.prototype.filter = function (predicate) {
     this.next_producer = new Producer(function (exchange) {
         if (predicate(exchange)) {
