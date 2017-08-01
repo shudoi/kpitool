@@ -28,24 +28,6 @@ function Endpoints() {
     };
 }
 
-function RequestReply() {
-    if (RequestReply.dict == undefined) {
-        RequestReply.dict = {};
-    }
-    RequestReply.prototype.putHandle = function (handleName, producer) {
-        console.log('put', handleName);
-        RequestReply.dict[handleName] = producer;
-    };
-    RequestReply.prototype.getHandle = function (handleName) {
-        console.log('get', handleName, RequestReply.dict);
-        return RequestReply.dict[handleName];
-    };
-    RequestReply.prototype.sendTo = function (handleName, exchange) {
-        exchange = exchange || new Exchange();
-        return this.getHandle(handleName).produce(exchange);
-    };
-}
-
 function EventGroup() {
     if (EventGroup.dict === undefined) {
         EventGroup.dict = {};
@@ -74,13 +56,12 @@ function EventGroup() {
                 Object.keys(group).forEach(function (eventName) {
                     el[eventName] = group[eventName];
                 });
-            })
+            });
         });
-    }
+    };
 }
 
 function To(processor) {
-    console.log("foo")
     Consumer.call(this, processor, this);
 }
 
@@ -98,17 +79,6 @@ function RouteId(routeId) {
 RouteId.prototype = Object.create(Consumer.prototype, {
     value: {
         constructor: RouteId
-    }
-});
-
-function Reply(handleName) {
-    Consumer.call(this, null, this);
-    new RequestReply().putHandle(handleName, this);
-}
-
-Reply.prototype = Object.create(Consumer.prototype, {
-    value: {
-        constructor: Reply
     }
 });
 

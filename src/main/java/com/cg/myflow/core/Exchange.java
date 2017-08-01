@@ -1,4 +1,4 @@
-package com.cg.myflow;
+package com.cg.myflow.core;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;

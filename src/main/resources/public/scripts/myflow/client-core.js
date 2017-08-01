@@ -72,12 +72,12 @@ Producer.prototype.document = function () {
     var args = arguments;
     this.next_producer = new Producer(createDocumentProcessor(args), this.consumer);
     return this.next_producer;
-}
+};
 
 Producer.prototype.when = function (routes) {
     this.next_producer = new Producer(createWhenProcessor(routes, this.consumer));
     return this.next_producer;
-}
+};
 
 
 Producer.prototype.filter = function (predicate) {
@@ -87,7 +87,7 @@ Producer.prototype.filter = function (predicate) {
         }
     }, this.consumer);
     return this.next_producer;
-}
+};
 
 Producer.prototype.update = function (param) {
     var processor = function (exchange) {
@@ -112,10 +112,10 @@ Producer.prototype.update = function (param) {
             exchange.setElement(ev(param['element'], exchange));
         }
         return exchange;
-    }
+    };
     this.next_producer = new Producer(processor, this.consumer);
     return this.next_producer;
-}
+};
 
 function createWhenProcessor(routes) {
     return function (exchange) {
@@ -136,7 +136,7 @@ function createWhenProcessor(routes) {
         if (producer) {
             return producer.consumer.consume(exchange);
         }
-    }
+    };
 }
 
 function createDocumentProcessor(args) {
@@ -145,7 +145,7 @@ function createDocumentProcessor(args) {
             args[i](exchange);
         }
         return exchange;
-    }
+    };
 }
 
 Producer.prototype.contextId = function (id) {

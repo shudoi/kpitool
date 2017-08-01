@@ -1,7 +1,7 @@
 package com.cg.myflow.consumer;
 
-import com.cg.myflow.Consumer;
-import com.cg.myflow.Exchange;
+import com.cg.myflow.core.Consumer;
+import com.cg.myflow.core.Exchange;
 import java.util.function.Function;
 
 public class To extends Consumer {

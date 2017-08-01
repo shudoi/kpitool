@@ -3,4 +3,4 @@ new Listener("onclick", byid("logout-link"))
             docCookies.removeItem("jwt");
             return exchange;
         })
-        .to(redirect("/login"));
+        .document(redirect("/login"));

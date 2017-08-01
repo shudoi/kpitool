@@ -18,7 +18,7 @@ function add() {
             }
             return result;
         }
-    }
+    };
 }
 
 function header() {
@@ -29,19 +29,19 @@ function header() {
     } else if (len === 1) {
         return function (exchange) {
             return exchange.getHeader(ev(args[0], exchange));
-        }
+        };
     } else {
         return function (exchange) {
             var headerName = ev(args[0], exchange);
             return headerName in exchange.getHeaders() ? exchange.getHeader(headerName) : ev(args[1], exchange);
-        }
+        };
     }
 }
 
 function body() {
     return function (exchange) {
         return exchange.getBody();
-    }
+    };
 }
 
 function get() {
@@ -60,7 +60,7 @@ function get() {
     } else if (len === 3) {
         return function (exchange) {
             return ev(args[0], exchange)[ev(args[1], exchange)] === ev(args[2], exchange);
-        }
+        };
     }
 }
 
@@ -77,7 +77,7 @@ function _in() {
                 }
             }
             return false;
-        }
+        };
     }
 }
 
@@ -119,7 +119,7 @@ function attr() {
     } else if (len === 3) {
         // attr(element, attrName, attrValue) => return result to set args-element attr value  
         return function (exchange) {
-            return ev(args[0], exchange).setAttribute(ev(args[1], exchange), ev(args))
+            return ev(args[0], exchange).setAttribute(ev(args[1], exchange), ev(args));
         };
     }
 }
@@ -134,7 +134,7 @@ function removeAttr() {
     } else if (len === 2) {
         return function (exchange) {
             return ev(args[0], exchange).removeAttribute(ev(args[1], exchange));
-        }
+        };
     }
 }
 
@@ -145,7 +145,7 @@ function text() {
         // text() => return exchange-element text
         return function (exchange) {
             return exchange.getElement().innerText;
-        }
+        };
     } else if (len === 1) {
         // text(element) => return args-element text
         // or
@@ -227,6 +227,7 @@ function query() {
         };
     }
 }
+
 function findOne() {
     var len = arguments.length;
     var args = arguments;
@@ -258,6 +259,7 @@ function eq() {
         };
     }
 }
+
 function notEq() {
     var len = arguments.length;
     var args = arguments;
@@ -334,6 +336,12 @@ function or() {
                 }
             }
             return false;
-        }
+        };
     }
+}
+
+function redirect(path) {
+    return function () {
+        document.location.href = path;
+    };
 }

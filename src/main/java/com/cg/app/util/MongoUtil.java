@@ -1,4 +1,4 @@
-package com.cg;
+package com.cg.app.util;
 
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;

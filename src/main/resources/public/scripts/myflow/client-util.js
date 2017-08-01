@@ -55,30 +55,26 @@ function getOr(object, attr, value) {
 function Options(element) {
     this.options = toArray((element || document).querySelectorAll('option'));
     Options.prototype.getIndexByText = function (text) {
-        var result = -1
+        var result = -1;
         this.options.forEach(function (option, index) {
             if (option.innerText == text) {
                 result = index;
             }
-        })
+        });
         return result;
-    }
+    };
 }
 
 function toArray(nodeList) {
-    /*if (nodeList.forEach) {
-     return nodeList;
-     } else {*/
     var result = [];
     for (var i = 0; i < nodeList.length; i++) {
-        result.push(nodeList[i])
+        result.push(nodeList[i]);
     }
     return result;
-    //}
 }
 
 function collectNthChild(elements, selector, nth) {
-    var result = []
+    var result = [];
     if (nth == 0) {
         toArray(elements).forEach(function (element) {
             result.push(element.querySelector(selector));
@@ -89,34 +85,6 @@ function collectNthChild(elements, selector, nth) {
         });
     }
     return result;
-}
-
-function CookieObject() {
-    if (!CookieObject.obj) {
-        console.log('cookie object initialized.');
-        if (document.cookie && document.cookie.startsWith('%7B')) {
-            CookieObject.obj = JSON.parse(decodeURI(document.cookie.split(' ')[0]));
-        } else {
-            CookieObject.obj = {};
-        }
-    }
-    CookieObject.prototype.set = function (key, value) {
-        CookieObject.obj[key] = value;
-        console.log('cookie set', CookieObject.obj)
-        document.cookie = encodeURI(JSON.stringify(CookieObject.obj)) + ' ;max-age=31536000';
-        console.log(encodeURI(JSON.stringify(CookieObject.obj)))
-    }
-    CookieObject.prototype.get = function (key, defaultValue) {
-        if (key in CookieObject.obj) {
-            console.log('get from cookie', CookieObject.obj)
-            return CookieObject.obj[key];
-        } else {
-            if (defaultValue) {
-                this.set(key, defaultValue);
-            }
-            return defaultValue;
-        }
-    }
 }
 
 function ElementReader(readerCreator) {
@@ -144,25 +112,3 @@ function ElementReader(readerCreator) {
         });
     };
 }
-
-/*function ExchangeToElement(template, mapping) {
- var self = this;
- self.template = template;
- self.mapping = mapping;
- ExchangeToElement.prototype.toElement = function (exchange, elementsFlag) {
- var element = document.createElement('template');
- element.innerHTML = self.template;
- toArray(element.content.querySelectorAll('[data-mapping]')).forEach(function (el) {
- var dataMappingKey = el.getAttribute('data-mapping');
- self.mapping[dataMappingKey](exchange, el);
- el.removeAttribute('data-mapping');
- });
- new EventGroup().setEvents(element);
- if (elementsFlag) {
- return element.content.childNodes;
- } else {
- return element.content.firstChild;
- }
- }
- }
- */

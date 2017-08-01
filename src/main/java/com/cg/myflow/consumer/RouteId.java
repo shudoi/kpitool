@@ -1,7 +1,7 @@
 package com.cg.myflow.consumer;
 
-import com.cg.myflow.Consumer;
-import com.cg.myflow.Endpoints;
+import com.cg.myflow.core.Consumer;
+import com.cg.myflow.core.Endpoints;
 
 public class RouteId extends Consumer {
 

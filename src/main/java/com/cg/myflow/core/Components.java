@@ -1,4 +1,4 @@
-package com.cg.myflow;
+package com.cg.myflow.core;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

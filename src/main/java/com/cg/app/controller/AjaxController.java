@@ -1,9 +1,6 @@
-package com.cg;
+package com.cg.app.controller;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-
+import com.cg.app.util.MongoUtil;
 import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -12,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cg.myflow.Endpoints;
-import com.cg.myflow.Exchange;
+import com.cg.myflow.core.Endpoints;
+import com.cg.myflow.core.Exchange;
 import com.mongodb.MongoClient;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.UpdateOptions;
@@ -21,37 +18,14 @@ import com.mongodb.client.model.UpdateOptions;
 import io.jsonwebtoken.Claims;
 
 @RestController
-public class ExchangeController {
+public class AjaxController {
 
     @Autowired
     MongoClient client;
 
-    @RequestMapping(value = "/boo", method = RequestMethod.POST,
-            consumes = MediaType.APPLICATION_JSON_VALUE)
-    Exchange boo(@RequestBody Exchange exchange) {
-        System.out.println(exchange.getBody());
-        exchange.setBody((String) exchange.getBody() + (String) exchange.getBody());
-        System.out.println(exchange.getHeaders());
-        return exchange;
-    }
-
-    @RequestMapping(value = "/bar", method = RequestMethod.POST,
-            consumes = MediaType.APPLICATION_JSON_VALUE)
-    Exchange bar(@RequestBody Exchange exchange) {
-        List<Object> list = new ArrayList<>();
-        list.add(1);
-        list.add("bar");
-        list.add(new LinkedHashMap<>());
-        exchange.setBody(list);
-        return exchange;
-    }
-
     @RequestMapping(value = "/login", method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     Exchange login(@RequestBody Exchange exchange) {
-    	System.out.println("toutatu");
-        String username = exchange.getHeader("username", String.class);
-        String password = exchange.getHeader("password", String.class);
         Endpoints.sendTo("login", exchange);
         return exchange;
     }

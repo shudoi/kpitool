@@ -3,7 +3,7 @@ function direct(routeId) {
         exchange = exchange || new Exchange();
         exchange = new Endpoints().sendTo(routeId, exchange);
         return exchange;
-    }
+    };
 }
 
 function formToExchange(formElement) {
@@ -42,7 +42,7 @@ function exchangeToElement(formElement) {
                     }
                 });
         return exchange;
-    }
+    };
 }
 
 function log(params) {
@@ -107,63 +107,62 @@ function buttonEnable(elements, bool) {
     if (typeof elements === 'string') {
         return function (exchange) {
             selectAll(elements).forEach(function (element) {
-                element.disabled = disable
+                element.disabled = disable;
             });
             return exchange;
-        }
+        };
     } else if (!elements.forEach) {
         elements = [elements];
     }
     return function (exchange) {
         elements.forEach(function (element) {
-            element.disabled = disable
+            element.disabled = disable;
         });
         return exchange;
-    }
+    };
 }
 
 function pageReload() {
     return function (exchange) {
         document.location.reload();
-    }
+    };
 }
 
 function pageTop() {
     return function (exchange) {
         window.scrollTo(0, 0);
         return exchange;
-    }
+    };
 }
 
 function delay(t) {
     if (Number.isInteger(t)) {
         t = 0;
     }
-    t *= 1000
+    t *= 1000;
     return function (exchange, func) {
         window.setTimeout(func, t);
-    }
+    };
 }
-
 
 function cookie(action, key, value) {
     if (action === 'get') {
         return function (exchange) {
             var v = new CookieObject().get(key, value);
             exchange.setHeader(key, v);
-            return exchange
-        }
+            return exchange;
+        };
     } else if (action === 'set') {
         return function (exchange) {
             var v = exchange.getHeader(key, value);
             new CookieObject().set(key, v);
-            return exchange
-        }
+            return exchange;
+        };
 
     } else {
         return function (exchange) {
-            return exchange
-        }
+            return exchange;
+        };
     }
 }
 
@@ -171,19 +170,8 @@ function modal(modalElement, action) {
     if (action === 'open') {
         return function (exchange) {
             modalElement.style.visibility = 'visible';
-            /*toArray(modalElement.querySelectorAll('[data-header],[data-header-from]'))
-             .forEach(function (element) {
-             var key = element.getAttribute('data-header') || element.getAttribute('data-header-from');
-             var tagName = element.tagName.toLocaleLowerCase();
-             var value = exchange.getHeader(key, '');
-             if (tagName === 'input' || tagName === 'textarea' || tagName === 'select') {
-             element.value = value;
-             } else {
-             element.textContent = value;
-             }
-             });*/
             return exchange;
-        }
+        };
     } else if (action === 'close') {
         return function (exchange) {
             toArray(modalElement.querySelectorAll('[data-header], [data-header-to]'))
@@ -200,14 +188,14 @@ function modal(modalElement, action) {
                 modalElement.style.visibility = 'hidden';
                 return exchange;
             }
-        }
+        };
     } else if (action === 'all-close') {
         return function (exchange) {
             toArray(document.querySelectorAll('.modal')).forEach(function (element) {
                 element.style.visibility = 'hidden';
             });
             return exchange;
-        }
+        };
     }
 }
 
@@ -220,11 +208,11 @@ function loadElement(element, loadFields) {
         });
         isTargetField = function (key) {
             return obj[key];
-        }
+        };
     } else {
         isTargetField = function (key) {
             return true;
-        }
+        };
     }
 
     return function (exchange) {
@@ -239,9 +227,9 @@ function loadElement(element, loadFields) {
                     exchange.setHeader(key, node.textContent);
                 }
             }
-        })
+        });
         return exchange;
-    }
+    };
 }
 
 function dataTransfer() {
@@ -253,26 +241,6 @@ function dataTransfer() {
         exchange = Exchange.fromJson(exchange.getHeader('dataTransfer').getData('application/json'), element);
         return exchange;
     };
-}
-
-
-function message(text, element) {
-    if (!element) {
-        element = byid("message");
-    }
-    if (text === 'clear') {
-        text = '';
-    }
-    return function (exchange) {
-        element.innerText = text;
-        return exchange;
-    };
-}
-
-function redirect(path) {
-    return function (exchange) {
-        document.location.href = path;
-    }
 }
 
 function updateHeader(obj) {
@@ -290,6 +258,7 @@ function updateElement(expression) {
         return exchange;
     };
 }
+
 function setText(elements, text) {
     if (!Array.isArray(elements)) {
         elements = [elements];
@@ -299,7 +268,7 @@ function setText(elements, text) {
             element.innerText = text;
         });
         return exchange;
-    }
+    };
 }
 
 function elementsToExchange(elementsQuery) { //buggy...
@@ -314,7 +283,7 @@ function elementsToExchange(elementsQuery) { //buggy...
         copiedHeaders['data'] = copyByJson(data);
         exchange.setHeaders(copiedHeaders);
         return exchange;
-    }
+    };
 }
 
 function dataHeaderToTable(headerName, tableQuery, trTemplate) {

@@ -1,4 +1,4 @@
-package com.cg;
+package com.cg.app.util;
 
 import java.util.List;
 import org.bson.Document;

@@ -1,4 +1,4 @@
-package com.cg.myflow;
+package com.cg.app.service;
 
 import org.springframework.stereotype.Component;
 

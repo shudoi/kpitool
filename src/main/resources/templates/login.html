@@ -308,29 +308,20 @@
         </div>
         <div th:replace="~{fragments/scripts :: myflow_scripts}"></div>
         <script>
-            new Listener('onload', window).to(function () {
-                console.log(docCookies.getItem("jwt"));
-                console.log("boo");
-            });
             new Listener('onsubmit', selectOne('form'))
-                    .to(log({'name': 'boobb', 'header': true}))
-                    .to(message('clear'))
+                    .document(text(byid('message'), ""))
                     .to(loadElement())
-                    .to(log({'name': 'zon', 'header': true}))
                     .task(server('/login'))
                     .when([
                         [function (exchange) {
                                 return exchange.getHeader("jwt");
                             },
                             new To(function (exchange) {
-                                console.log("yes")
-                                console.log(exchange.getHeader("jwt"));
                                 docCookies.setItem("jwt", exchange.getHeader("jwt"), 60 * 60 * 24 * 30);
                                 return exchange;
                             }).to(redirect("/"))
                         ],
-                        ["otherwise",
-                            new To(message("ログインに失敗しました。"))]
+                        ["otherwise", new To().document(text(byid('message'), "ログインに失敗しました。"))]
                     ]);
         </script>
     </body>

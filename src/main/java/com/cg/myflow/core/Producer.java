@@ -1,5 +1,7 @@
-package com.cg.myflow;
+package com.cg.myflow.core;
 
+import com.cg.myflow.core.Exchange;
+import com.cg.myflow.core.Consumer;
 import java.util.function.Function;
 
 public class Producer {

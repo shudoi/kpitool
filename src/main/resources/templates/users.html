@@ -19,21 +19,6 @@
             </div>
         </div>
         <script>
-            var env = {'context':
-                        {'path': '/boo'}
-            };
-            new Listener('onload', window)
-                    .task(server('/bar'))
-                    .to(log("boo"));
-            /*new Listener('onclick', 'input[type=button]')
-             .to(loadElement(byid('myform')))
-             .to(function (exchange) {
-             exchange.setBody("chaichai");
-             console.log(exchange.getHeaders())
-             return exchange;
-             })
-             .task(server('/boo'))
-             .to(log({'body': true, 'header': 'true'}));*/
         </script>
     </body>
 
