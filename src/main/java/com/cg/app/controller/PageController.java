@@ -1,21 +1,23 @@
 package com.cg.app.controller;
 
-import com.cg.app.util.CollectionUtil;
-import com.cg.myflow.core.Endpoints;
-import com.cg.myflow.core.Exchange;
-import com.mongodb.MongoClient;
-import com.mongodb.client.MongoCursor;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
+
 import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
+import com.cg.app.util.CollectionUtil;
+import com.cg.myflow.core.Endpoints;
+import com.cg.myflow.core.Exchange;
+import com.mongodb.MongoClient;
+import com.mongodb.client.MongoCursor;
 
 @Controller
 public class PageController {
