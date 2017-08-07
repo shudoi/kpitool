@@ -146,7 +146,7 @@
                     })
                     .filter(all(query('#my-table tbody tr'),
                             or(eq(header('no'), text(query(element(), '[data-header="no"]'))),
-                                    notEq(header('task.name'), text(query(element(), '[data-header="task.name"]')))),
+                                    notEq(header('task.id'), text(query(element(), '[data-header="task.id"]')))),
                             _alert("That item has already been entered.")))
                     .to(function (exchange) {
                         var no = exchange.getHeader("no");
