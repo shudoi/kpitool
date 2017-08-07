@@ -6,25 +6,29 @@
             <h1>Task statistics</h1>
             <select data-header="name" id="task-select">
                 <option value>choose task</option>
-                <option th:each="task : ${tasks}" th:value="${task.name}" th:text="${task.name}">
+                <option th:each="task : ${tasks}" th:value="${task.getId()}" th:text="${task.getName()}">
 
                 </option>
             </select>
+            <p id="taskName">下記に表示されます</p>
             <table class="table table-hover" id="info-table">
                 <thead><th>Date</th><th>User</th><th>Progress</th><th>Actual time</th><th>Comment</th></thead>
                 <tbody></tbody>
             </table>
         </div>
         <script>
-            var trTemplate = '<td data-header="date"></td><td data-header="username"></td><td class="text-right"><span data-header="today_progress"></span>%</td><td class="text-right"><span data-header="actual_time"></span>h</td><td data-header="comment"></td>'
+            var trTemplate = '<td data-header="report_date"></td><td data-header="person.username"></td><td class="text-right"><span data-header="today_progress"></span>%</td><td class="text-right"><span data-header="actual_time"></span>h</td><td data-header="comment"></td>'
             new Listener('onchange', byid('task-select'))
                     .filter(get(element(), 'value'))
-                    .to(updateHeader({
-                        'name': get(element(), 'value'),
-                        'show_log': true
-                    }))
+                    .update({'header': {
+                            'task.id': get(element(), 'value'),
+                            'show_log': true
+                        }})
+                    .to(modal(byid('loading-modal'), 'open'))
                     .task(server('/task-info'))
-                    .to(dataHeaderToTable("data", "#info-table", trTemplate));
+                    .to(modal(byid('loading-modal'), 'close'))
+                    .to(log())
+                    .to(dataHeaderToTable(header('entries'), byid("info-table"), trTemplate));
         </script>
     </body>
 </html>

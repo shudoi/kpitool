@@ -13,11 +13,36 @@ function Exchange(body, header, element) {
     };
 
     Exchange.prototype.getHeader = function (key, value) {
-        return (key in self.internalObject['header']) ? self.internalObject['header'][key] : value;
+        if (key) {
+            keys = key.split(".");
+            if (keys.length === 1) {
+                return (key in self.internalObject['header']) ? self.internalObject['header'][key] : value;
+            } else {
+                var result = self.internalObject['header'];
+                for (var i = 0; i < keys.length; i++) {
+                    result = (keys[i] in result) ? result[keys[i]] : {};
+                }
+                if (JSON.stringify(result) === "{}") {
+                    result = value;
+                }
+                return result;
+            }
+        } else {
+            return value;
+        }
     };
 
+    Exchange.prototype.getHeader()
+
     Exchange.prototype.setHeader = function (key, value) {
-        self.internalObject['header'][key] = value;
+        if (key) {
+            var keys = key.split(".");
+            if (keys.length === 1) {
+                self.internalObject['header'][key] = value;
+            } else {
+                writeNestedProperty(self.internalObject['header'], keys, value);
+            }
+        }
     };
 
     Exchange.prototype.setHeaders = function (obj) {
@@ -210,6 +235,7 @@ Routes.prototype.to = function (processor) {
 
 Routes.prototype.contextName = function (name) {
     for (var i = 0; i < this.routes.length; i++) {
+        getHer
         var route = this.routes[i];
         route.next_producer = new Producer(function (exchange) {
             exchange.setHeader('__context_name', name);

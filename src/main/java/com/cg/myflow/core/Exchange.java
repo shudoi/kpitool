@@ -11,88 +11,92 @@ import io.jsonwebtoken.Claims;
 
 public class Exchange implements Serializable {
 
-	@JsonProperty("body")
-	private Object body;
-	@JsonProperty("header")
-	private Map<String, Object> header = new LinkedHashMap<>();
-	@JsonIgnore
-	private Claims claims;
-	@JsonIgnore
-	private Map<String, Object> rawData = new LinkedHashMap<>();
-	@JsonIgnore
-	private Map<String, Object> model;
-	@JsonIgnore
-	private String page;
-	@JsonIgnore
-	private boolean produceEnd = false;
+    @JsonProperty("body")
+    private Object body;
+    @JsonProperty("header")
+    private Map<String, Object> header = new LinkedHashMap<>();
+    @JsonIgnore
+    private Claims claims;
+    @JsonIgnore
+    private final Map<Class, Object> rawData = new LinkedHashMap<>();
+    @JsonIgnore
+    private Map<String, Object> model = new LinkedHashMap<>();
+    @JsonIgnore
+    private String page;
+    @JsonIgnore
+    private boolean produceEnd = false;
 
-	public void setBody(Object body) {
-		this.body = body;
-	}
+    public void setBody(Object body) {
+        this.body = body;
+    }
 
-	public void setHeader(Map<String, Object> header) {
-		this.header = header;
-	}
+    public void setHeader(Map<String, Object> header) {
+        this.header = header;
+    }
 
-	public void setHeader(String key, Object value) {
-		this.header.put(key, value);
-	}
+    public void setHeader(String key, Object value) {
+        this.header.put(key, value);
+    }
 
-	public void setClaims(Claims claims) {
-		this.claims = claims;
-	}
+    public void setClaims(Claims claims) {
+        this.claims = claims;
+    }
 
-	public Object getBody() {
-		return this.body;
-	}
+    public Object getBody() {
+        return this.body;
+    }
 
-	public Map<String, Object> getHeaders() {
-		return this.header;
-	}
+    public Map<String, Object> getHeaders() {
+        return this.header;
+    }
 
-	public Object getHeader(String key) {
-		return this.header.get(key);
-	}
+    public Object getHeader(String key) {
+        return this.header.get(key);
+    }
 
-	public <T> T getHeader(String key, Class<T> clazz) {
-		return clazz.cast(this.header.get(key));
-	}
+    public <T> T getHeader(String key, Class<T> clazz) {
+        return clazz.cast(this.header.get(key));
+    }
 
-	public Claims getClaims() {
-		return this.claims;
-	}
+    public Claims getClaims() {
+        return this.claims;
+    }
 
-	public Object getRawData(String key) {
-		return this.rawData.get(key);
-	}
+    public Object getRawData(String key) {
+        return this.rawData.get(key);
+    }
 
-	public void setRawData(String key, Object value) {
-		this.rawData.put(key, value);
-	}
+    public <T> T getRawData(Class<T> clazz) {
+        return clazz.cast(this.rawData.get(clazz));
+    }
 
-	public Map<String, Object> getModel() {
-		return this.model;
-	}
+    public void setRawData(Class clazz, Object value) {
+        this.rawData.put(clazz, value);
+    }
 
-	public void setModel(Map<String, Object> model) {
-		this.model = model;
+    public Map<String, Object> getModel() {
+        return this.model;
+    }
 
-	}
+    public void setModel(Map<String, Object> model) {
+        this.model = model;
 
-	public String getPage() {
-		return this.page;
-	}
+    }
 
-	public void setPage(String page) {
-		this.page = page;
-	}
+    public String getPage() {
+        return this.page;
+    }
 
-	public boolean isProduceEnd() {
-		return this.produceEnd;
-	}
+    public void setPage(String page) {
+        this.page = page;
+    }
 
-	public void setProduceEnd(boolean produceEnd) {
-		this.produceEnd = produceEnd;
-	}
+    public boolean isProduceEnd() {
+        return this.produceEnd;
+    }
+
+    public void setProduceEnd(boolean produceEnd) {
+        this.produceEnd = produceEnd;
+    }
 
 }

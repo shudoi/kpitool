@@ -21,30 +21,33 @@ function formToExchange(formElement) {
 function exchangeToElement(formElement) {
     return function (exchange) {
         var targetElement = formElement ? ev(formElement, exchange) : exchange.getElement();
-        toArray(targetElement.querySelectorAll('[data-header], [data-header-from]'))
-                .forEach(function (element) {
-                    var key = element.getAttribute('data-header') || element.getAttribute('data-header-from');
-                    var value = exchange.getHeader(key, '');
-                    if (element.tagName.toLowerCase() == 'select') {
-                        if (isNaN(Number(value))) {
-                            toArray(element.querySelectorAll('option')).forEach(function (option, index) {
-                                if (option.value === value) {
-                                    element.selectedIndex = index;
-                                }
-                            });
-                        } else {
-                            element.selectedIndex = value || 0;
-                        }
-                    } else if ('value' in element) {
-                        element.value = value;
-                    } else {
-                        element.innerText = value;
-                    }
-                });
+        exchangeToElementLogic(exchange, targetElement);
         return exchange;
     };
 }
 
+function exchangeToElementLogic(exchange, targetElement) {
+    toArray(targetElement.querySelectorAll('[data-header], [data-header-from]'))
+            .forEach(function (element) {
+                var key = element.getAttribute('data-header') || element.getAttribute('data-header-from');
+                var value = exchange.getHeader(key, '');
+                if (element.tagName.toLowerCase() == 'select') {
+                    if (isNaN(Number(value))) {
+                        toArray(element.querySelectorAll('option')).forEach(function (option, index) {
+                            if (option.value === value) {
+                                element.selectedIndex = index;
+                            }
+                        });
+                    } else {
+                        element.selectedIndex = value || 0;
+                    }
+                } else if ('value' in element) {
+                    element.value = value;
+                } else {
+                    element.innerText = value;
+                }
+            });
+}
 function log(params) {
     params = params || {};
     var logName = 'log';
@@ -271,38 +274,86 @@ function setText(elements, text) {
     };
 }
 
-function elementsToExchange(elementsQuery) { //buggy...
+function elementsToExchange(elementsExpression) { //buggy...
     return function (exchange) {
         var copiedHeaders = copyByJson(exchange.getHeaders());
-        var data = selectAll(elementsQuery)
-                .reduce(function (prev, current) {
-                    var ex = loadElement(current)(new Exchange());
-                    prev.push(ex.getHeaders());
-                    return prev;
-                }, []);
+        var elements = ev(elementsExpression, exchange);
+        if (!("length" in elements)) {
+            elements = [elements];
+        }
+        console.log("foo", elements);
+        var data = elements.reduce(function (prev, current) {
+            var ex = loadElement(current)(new Exchange());
+            prev.push(ex.getHeaders());
+            return prev;
+        }, []);
         copiedHeaders['data'] = copyByJson(data);
         exchange.setHeaders(copiedHeaders);
         return exchange;
     };
 }
 
-function dataHeaderToTable(headerName, tableQuery, trTemplate) {
-    if (!tableQuery.endsWith(" tbody")) {
-        tableQuery += " tbody";
-    }
-    var ete = exchangeToElement();
+/*function dataHeaderToTable(headerName, tableQuery, trTemplate) {
+ if (!tableQuery.endsWith(" tbody")) {
+ tableQuery += " tbody";
+ }
+ var ete = exchangeToElement();
+ return function (exchange) {
+ var tbody = document.querySelector(tableQuery);
+ while (tbody.firstChild) {
+ tbody.removeChild(tbody.firstChild);
+ }
+ var tableData = exchange.getHeader(headerName);
+ tableData.forEach(function (data) {
+ var child = document.createElement("tr");
+ child.innerHTML = trTemplate;
+ ete(new Exchange(null, data, child));
+ tbody.appendChild(child);
+ });
+ return exchange;
+ };
+ }*/
+
+function dataHeaderToTable(dataExpression, tableExpression, trTemplate) {
     return function (exchange) {
-        var tbody = document.querySelector(tableQuery);
-        while (tbody.firstChild) {
-            tbody.removeChild(tbody.firstChild);
+        var target = ev(tableExpression, exchange);
+        if (target.tagName.toLocaleLowerCase() === 'tbody') {
+        } else if (target.tagName.toLocaleLowerCase() === 'table') {
+            target = target.querySelector("tbody");
+        } else {
+            return exchange;
         }
-        var tableData = exchange.getHeader(headerName);
+        while (target.firstChild) {
+            target.removeChild(target.firstChild);
+        }
+        var tableData = ev(dataExpression, exchange);
+        var ete = exchangeToElement();
         tableData.forEach(function (data) {
             var child = document.createElement("tr");
             child.innerHTML = trTemplate;
             ete(new Exchange(null, data, child));
-            tbody.appendChild(child);
+            target.appendChild(child);
         });
+        return exchange;
+    }
+
+}
+
+
+function exchangeToElements(dataExpression, elementsExpression) {
+    return function (exchange) {
+        var dataArray = ev(dataExpression, exchange);
+        if (!Array.isArray(dataArray)) {
+            dataArray = toArray(dataArray);
+        }
+        var elements = ev(elementsExpression, exchange);
+        if (!Array.isArray(elements)) {
+            elements = toArray(elements);
+        }
+        var len = Math.min(dataArray.length, elements.length);
+        for (var i = 0; i < len; i++) {
+            exchangeToElementLogic(new Exchange({}, dataArray[i]), elements[i]);
+        }
         return exchange;
     };
 }

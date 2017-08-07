@@ -10,8 +10,9 @@
                     <tr><th>Username</th><th>Role</th><th>Project</th></tr>
                 </thead>
                 <tbody>
-                    <tr><td>admin</td><td>Administrator</td><td>KPI tool</td></tr>
-                    <tr><td>member</td><td>Team member</td><td>KPI tool</td></tr>
+                    <tr th:each="item: ${users}">
+                        <td th:text="${item.getUsername()}"></td><td></td><td></td>
+                    </tr>
                 </tbody>
             </table>
             <div th:classappend="${username == 'admin' ? 'show':'hide'}">

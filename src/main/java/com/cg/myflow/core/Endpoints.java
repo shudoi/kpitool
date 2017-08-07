@@ -16,6 +16,10 @@ public class Endpoints {
     }
 
     public static Exchange sendTo(String endpointName, Exchange exchange) {
-        return MAPPING.get(endpointName).consume(exchange);
+        Consumer consumer = MAPPING.get(endpointName);
+        if(consumer == null){
+            System.out.println("endpoint:" + endpointName +" doesn't exist.");
+        }
+        return consumer.consume(exchange);
     }
 }

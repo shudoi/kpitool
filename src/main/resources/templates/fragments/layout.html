@@ -50,8 +50,12 @@
                 </ul>
             </div>
         </nav>
+        <div id="loading-modal">
+            <img th:src="@{/images/img-loading.gif}" width="80" height="80" alt="Now Loading..." />
+        </div>
         <div th:replace="~{fragments/scripts :: myflow_scripts}"></div>
         <div th:replace="~{fragments/scripts :: common_route_scripts}"></div>
         <div th:replace="${template}"/>
         <div th:replace="~{fragments/scripts :: webjars_scripts}"></div>
-    </body>
+    </div>
+</body>

@@ -64,6 +64,26 @@ function get() {
     }
 }
 
+function map() {
+    var len = arguments.length;
+    var args = arguments;
+    if (len === 0) {
+        return false;
+    } else if (len === 1) {
+        return function (exchange) {
+            return ev(args[0], exchange);
+        };
+    } else if (len === 2) {
+        return function (exchange) {
+            return ev(args[0], exchange)[ev(args[1], exchange)];
+        };
+    } else if (len === 3) {
+        return function (exchange) {
+            return ev(args[0], exchange)[ev(args[1], exchange)] === ev(args[2], exchange);
+        };
+    }
+}
+
 function _in() {
     var len = arguments.length;
     var args = arguments;
@@ -343,5 +363,16 @@ function or() {
 function redirect(path) {
     return function () {
         document.location.href = path;
+    };
+}
+
+function select(elementExpression, selectorExpression) {
+    return function (exchange) {
+        var element = ev(elementExpression, exchange);
+        if (Array.isArray(element)) {
+            element = element[0];
+        }
+        var selector = ev(selectorExpression, exchange);
+        return element.querySelectorAll(selector);
     };
 }

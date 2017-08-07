@@ -67,9 +67,9 @@ function Options(element) {
 
 function toArray(nodeList) {
     var result = [];
-    for (var i = 0; i < nodeList.length; i++) {
-        result.push(nodeList[i]);
-    }
+        for (var i = 0; i < nodeList.length; i++) {
+            result.push(nodeList[i]);
+        }
     return result;
 }
 
@@ -111,4 +111,20 @@ function ElementReader(readerCreator) {
             self.exchange.setHeader(key, self.read(key));
         });
     };
+}
+
+function writeNestedProperty(toWriteValue, keys, value) {
+    if (keys.length === 1) {
+        toWriteValue[keys[0]] = value;
+        return toWriteValue;
+    } else {
+        var key = keys.shift();
+        if (key in toWriteValue) {
+            var nextValue = toWriteValue[key];
+        } else {
+            var nextValue = {};
+        }
+        toWriteValue[key] = writeNestedProperty(nextValue, keys, value);
+        return toWriteValue;
+    }
 }
