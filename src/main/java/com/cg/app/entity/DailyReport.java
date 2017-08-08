@@ -1,10 +1,9 @@
 package com.cg.app.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.CascadeType;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -14,15 +13,44 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
-import lombok.Data;
 
 @Entity
-@Data
 @Table(name = "daily_report", indexes = {
     @Index(columnList = "person_id")})
 public class DailyReport implements Serializable {
 
-    @Id
+    public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public List<Entry> getEntries() {
+		return entries;
+	}
+
+	public void setEntries(List<Entry> entries) {
+		this.entries = entries;
+	}
+
+	public Person getPerson() {
+		return person;
+	}
+
+	public void setPerson(Person person) {
+		this.person = person;
+	}
+
+	public String getReportDate() {
+		return reportDate;
+	}
+
+	public void setReportDate(String reportDate) {
+		this.reportDate = reportDate;
+	}
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 

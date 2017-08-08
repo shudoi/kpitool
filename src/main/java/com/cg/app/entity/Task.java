@@ -1,22 +1,68 @@
 package com.cg.app.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
-import javax.persistence.Cacheable;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import lombok.Data;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
-@Data
 @Table(name = "task")
 public class Task implements Serializable {
 
-    @Id
+	public Integer getId() {
+		return id;
+	}
+	public void setId(Integer id) {
+		this.id = id;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getScheduledStartDate() {
+		return scheduledStartDate;
+	}
+	public void setScheduledStartDate(String scheduledStartDate) {
+		this.scheduledStartDate = scheduledStartDate;
+	}
+	public String getScheduledEndDate() {
+		return scheduledEndDate;
+	}
+	public void setScheduledEndDate(String scheduledEndDate) {
+		this.scheduledEndDate = scheduledEndDate;
+	}
+	public String getActualStartDate() {
+		return actualStartDate;
+	}
+	public void setActualStartDate(String actualStartDate) {
+		this.actualStartDate = actualStartDate;
+	}
+	public String getActualEndDate() {
+		return actualEndDate;
+	}
+	public void setActualEndDate(String actualEndDate) {
+		this.actualEndDate = actualEndDate;
+	}
+	public Integer getTotalProgress() {
+		return totalProgress;
+	}
+	public void setTotalProgress(Integer totalProgress) {
+		this.totalProgress = totalProgress;
+	}
+	public Integer getBranch() {
+		return branch;
+	}
+	public void setBranch(Integer branch) {
+		this.branch = branch;
+	}
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @JsonProperty("name")
