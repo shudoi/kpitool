@@ -84,6 +84,7 @@ RouteId.prototype = Object.create(Consumer.prototype, {
 
 function Listener(eventName, elements, attributes) {
     Consumer.call(this, null, this);
+    console.assert(typeof eventName === 'string', '1st argument must be string. (Listener)');
     var consumer = this;
     var groupName = false;
     if (typeof elements === 'string') {
@@ -96,19 +97,19 @@ function Listener(eventName, elements, attributes) {
     var func;
     if (attributes && attributes.length > 0) {
         func = function (event) {
-            event.preventDefault();
+            //event.preventDefault();
             var header = {};
             attributes.forEach(function (key) {
                 header[key] = event[key];
             });
             consumer.consume(new Exchange({}, header, event.target));
-            return false;
+            //return false;
         };
     } else {
         func = function (event) {
-            event.preventDefault();
+            //event.preventDefault();
             consumer.consume(new Exchange({}, {}, event.target));
-            return false;
+            //return false;
         };
     }
     elements.forEach(function (element) {

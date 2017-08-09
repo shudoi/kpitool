@@ -1,26 +1,218 @@
 <!DOCTYPE html>
 
 <html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'users')}">
-    <body>
-        <div class="container">
-            <h1>Users</h1>
-            <p><span th:text="${username}"></span>としてログイン</p>
-            <table class="table table-hover">
-                <thead>
-                    <tr><th>Username</th><th>Role</th><th>Project</th></tr>
-                </thead>
-                <tbody>
-                    <tr th:each="item: ${users}">
-                        <td th:text="${item.getUsername()}"></td><td></td><td></td>
-                    </tr>
-                </tbody>
-            </table>
-            <div th:classappend="${username == 'admin' ? 'show':'hide'}">
-                <input type="button" class="btn btn-primary btn-block" value="Add User">
-            </div>
-        </div>
-        <script>
-        </script>
-    </body>
+<body>
+	<div class="container">
+		<h1>Users</h1>
+		<p>
+			<span th:text="${username}"></span>としてログイン
+		</p>
+		<table class="table table-hover">
+			<thead>
+				<tr>
+					<th>Username</th>
+					<th>Role</th>
+					<th>Project</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="item: ${users}">
+					<td th:text="${item.getUsername()}"></td>
+					<td></td>
+					<td></td>
+				</tr>
+			</tbody>
+		</table>
+		<div th:classappend="${username == 'admin' ? 'show':'hide'}">
+			<input type="button" class="btn btn-primary btn-block" value="Add User" id="add-user-modal-open">
+		</div>
+	</div>
+	<div id="add-user-modal" class="my-modal">
+		<div id="modal-content">
+			<form id='add-user-form'>
+				<h2>
+					<span id="add-user-form-title">Add User</span>
+				</h2>
+				<table class="table">
+					<tr>
+						<th>User Id</th>
+						<td>
+							<input type="text" data-header='userid'>
+						</td>
+					</tr>
+					<tr>
+						<th>KPI Role</th>
+						<td>
+							<label>
+								<input type="radio" name="kpi_role" value="1">
+								Employee
+							</label>
+							<br>
+							<label>
+								<input type="radio" name="kpi_role" value="2">
+								Manager
+							</label>
+							<br>
+							<label>
+								<input type="radio" name="kpi_role" value="3">
+								Delivery Manager
+							</label>
+						</td>
+					</tr>
+					<tr>
+						<th>Name (English)</th>
+						<td>
+							<input type="text" maxlength="50">
+						</td>
+					</tr>
+					<tr>
+						<th>Name (Japanese)</th>
+						<td>
+							<input type="text" maxlength="20">
+						</td>
+					</tr>
+					<tr>
+						<th>Name (Kana)</th>
+						<td>
+							<input type="text" maxlength="100">
+						</td>
+					</tr>
+					<tr>
+						<th>Gender</th>
+						<td>
+							<label>
+								<input type="radio" name="gender" value="1">
+								Male
+							</label>
+							<label>
+								<input type="radio" name="gender" value="2">
+								Female
+							</label>
+						</td>
+					</tr>
+					<tr>
+						<th>Employee ID</th>
+						<td>
+							<input type="text" maxlength="50">
+						</td>
+					</tr>
+					<tr>
+						<th>Date of Birth</th>
+						<td>
+							<input type="text" maxlength="4">
+							/
+							<input type="text" maxlength="2">
+							/
+							<input type="text" maxlength="2">
+						</td>
+					</tr>
+					<tr>
+						<th>Base Location</th>
+						<td>
+							<input type="text" maxlength="255">
+						</td>
+					</tr>
+					<tr>
+						<th>Assigned Date to MLJ</th>
+						<td>
+							<input type="text" maxlength="4">
+							/
+							<input type="text" maxlength="2">
+							/
+							<input type="text" maxlength="2">
+						</td>
+					</tr>
+					<tr>
+						<th>Role</th>
+						<td>
+							<input type="text" maxlength="2">
+						</td>
+					</tr>
+					<tr>
+						<th>Grade</th>
+						<td>
+							<input type="text" maxlength="2">
+						</td>
+					</tr>
+					<tr>
+						<th>Designation</th>
+						<td>
+							<input type="text" maxlength="2">
+						</td>
+					</tr>
+					<tr>
+						<th>Skill Set</th>
+						<td>
+							<input type="text" maxlength="255">
+						</td>
+					</tr>
+					<tr class="hide">
+						<th></th>
+						<td data-header="task.name"></td>
+					</tr>
+					<tr>
+						<th>Scheduled start date</th>
+						<td data-header="task.scheduled_start_date"></td>
+					</tr>
+					<tr>
+						<th>Scheduled end date</th>
+						<td data-header="task.scheduled_end_date"></td>
+					</tr>
+					<tr>
+						<th>Actual start date</th>
+						<td data-header="task.actual_start_date"></td>
+					</tr>
+					<tr>
+						<th>Actual end date</th>
+						<td data-header="task.actual_end_date"></td>
+					</tr>
+					<tr>
+						<th>Today Progress</th>
+						<td>
+							<input type="number" data-header="today_progress" min="0" max="100" step="1" style="width: 70px;">
+							%
+						</td>
+					</tr>
+					<tr>
+						<th>Total Progress</th>
+						<td>
+							<span data-header="task.total_progress"></span>%
+						</td>
+					</tr>
+					<tr>
+						<th>Actual time</th>
+						<td>
+							<input type="number" data-header="actual_time" min="0.25" max="24" step="0.25" style="width: 70px;">
+							h
+						</td>
+					</tr>
+					<tr>
+						<th>Comment</th>
+						<td>
+							<textarea data-header="comment" rows="3"></textarea>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2">
+							<input type="button" value="Save" id='save-item' class="btn btn-default">
+							<input type="button" value="Close" id='add-user-modal-close' class="btn btn-default">
+						</td>
+					</tr>
+				</table>
+			</form>
+		</div>
+	</div>
+	<script>
+		new Listener("onclick", byid("add-user-modal-open"))
+				.to(modal(byid('add-user-modal'), 'open'))
+				.to(function(exchange) {
+					return exchange;
+				});
+
+		new Listener('onclick', selectAll('#add-user-modal, #add-user-modal-close'))
+				.filter(_in(get(element(), 'id'), [ 'add-user-modal', 'add-user-modal-close' ]))
+				.to(modal(byid('add-user-modal'), 'close'));
+	</script>
+</body>
 
 </html>

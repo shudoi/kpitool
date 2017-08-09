@@ -1,12 +1,13 @@
 package com.cg.app.controller;
 
-import com.cg.app.entity.DailyReport;
 import java.util.Map;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.cg.app.entity.DailyReport;
 import com.cg.myflow.core.Endpoints;
 import com.cg.myflow.core.Exchange;
 
@@ -24,6 +25,7 @@ public class PageController {
         exchange.setModel(model);
         exchange.setHeader("jwt", jwtToken);
         Endpoints.sendTo("page/home", exchange);
+        Endpoints.sendTo("_user/list", exchange);
         return exchange.getPage();
     }
 
